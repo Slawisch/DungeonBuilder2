@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\dmitr\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\dmitr\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_DungeonBuilder2.-2048079775.00" t="ExcludeRecursive" />
+    <e p="C:\Users\dmitr\RiderProjects\DungeonBuilder2" t="IncludeFlat">
+      <e p="DungeonBuilder2" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="BuildingComponent.cs" t="Include" />
+        <e p="Contour.cs" t="Include" />
+        <e p="ContourApex.cs" t="Include" />
+        <e p="Door.cs" t="Include" />
+        <e p="DungeonBuilder2.csproj" t="IncludeRecursive" />
+        <e p="Form1.cs" t="Include" />
+        <e p="Form1.Designer.cs" t="Include" />
+        <e p="Form1.resx" t="Include" />
+        <e p="Furniture.cs" t="Include" />
+        <e p="GraphicalObject.cs" t="Include" />
+        <e p="Grid.cs" t="Include" />
+        <e p="ImageExtension.cs" t="Include" />
+        <e p="Mode.cs" t="Include" />
+        <e p="MovementFreedom.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="PointExtension.cs" t="Include" />
+        <e p="PolyWall.cs" t="Include" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="Resources" t="Include" />
+        <e p="Ruler.cs" t="Include" />
+        <e p="TestRectangle.cs" t="Include" />
+        <e p="Wall.cs" t="Include" />
+        <e p="Window.cs" t="Include" />
+      </e>
+      <e p="DungeonBuilder2.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
