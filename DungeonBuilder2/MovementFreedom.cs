@@ -2,6 +2,9 @@
 {
     public enum MovementFreedom
     {
-        
+        None,
+        NS,
+        WE,
+        Any
     }
 }
