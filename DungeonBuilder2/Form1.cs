@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using DungeonBuilder2.Properties;
 
 namespace DungeonBuilder2
@@ -14,12 +15,12 @@ namespace DungeonBuilder2
     public partial class Form1 : Form
     {
         private readonly Grid _grid;
-        private readonly List<BuildingComponent> _walls = new List<BuildingComponent>();
-        private readonly List<BuildingComponent> _doors = new List<BuildingComponent>();
-        private readonly List<BuildingComponent> _windows = new List<BuildingComponent>();
-        private readonly List<Ruler> _rulers = new List<Ruler>();
-        private readonly List<Point[]> _lines = new List<Point[]>();
-        private readonly List<Furniture> _furniture = new List<Furniture>();
+        private List<BuildingComponent> _walls = new List<BuildingComponent>();
+        private List<BuildingComponent> _doors = new List<BuildingComponent>();
+        private List<BuildingComponent> _windows = new List<BuildingComponent>();
+        private List<BuildingComponent> _rulers = new List<BuildingComponent>();
+        private List<BuildingComponent> _lines = new List<BuildingComponent>();
+        private List<BuildingComponent> _furniture = new List<BuildingComponent>();
         private Point _lastMousePos = Point.Empty;
         private Wall _tempWall;
         private Window _tempWindow;
@@ -28,8 +29,8 @@ namespace DungeonBuilder2
         private Point[] _tempLine;
         private Ruler _tempRuler;
         private Furniture _tempFurniture;
-        private string currentDirectory = Directory.GetCurrentDirectory();
         private Mode _mode = Mode.BuildingWall;
+        private int _currentRotate = 0;
 
         public Form1()
         {
@@ -57,7 +58,7 @@ namespace DungeonBuilder2
             {
                 e.Graphics.DrawLine(new Pen(Color.Gainsboro, 2), door.Corners[0], door.Corners[1]);
                 e.Graphics.DrawLine(new Pen(Color.Gray, 2), door.Corners[0], door.Corners[2]);
-                e.Graphics.DrawArc(Pens.Gray, door.Corners[0].X - door.Width, door.Corners[0].Y - door.Width, door.Width*2, door.Width*2, (int) -(180 / Math.PI * door.Corners[0].GetAngle(door.Corners[1])), door.OpenSide * 45);
+                e.Graphics.DrawArc(Pens.Gray, door.Corners[0].X - door.Width, door.Corners[0].Y - door.Width, door.Width*2, door.Width*2, (int) -(180 / Math.PI * door.Corners[0].GetAngle(door.Corners[1])), 45);
             }
             
             foreach (Window window in _windows)
@@ -66,9 +67,9 @@ namespace DungeonBuilder2
                 e.Graphics.DrawLine(Pens.Gainsboro, window.Corners[0].AvgPoint(window.Corners[3]), window.Corners[1].AvgPoint(window.Corners[2]));
             }
             
-            foreach (Point[] line in _lines)
+            foreach (Line line in _lines)
             {
-                e.Graphics.DrawLines(Pens.Gainsboro, line);
+                e.Graphics.DrawLine(Pens.Gainsboro, line.PointFrom, line.PointTo);
             }
             
             foreach (Ruler ruler in _rulers)
@@ -84,7 +85,7 @@ namespace DungeonBuilder2
                 e.Graphics.Restore(graphicsState);
             }
             
-            foreach (var furniture in _furniture)
+            foreach (Furniture furniture in _furniture)
                 e.Graphics.DrawImage(furniture.FImage, furniture.Location.X, furniture.Location.Y, furniture.FImage.Width, furniture.FImage.Height);
 
             if(_tempWall != null)
@@ -112,6 +113,10 @@ namespace DungeonBuilder2
             if(_tempFurniture != null)
                 e.Graphics.DrawImage(_tempFurniture.FImage, _tempFurniture.Location.X, _tempFurniture.Location.Y, _tempFurniture.FImage.Width, _tempFurniture.FImage.Height);
 
+            // Bitmap bm = Resources.Bed;
+            // bm.RotateFlip(RotateFlipType.Rotate180FlipNone);
+            // e.Graphics.DrawImage(bm, 50, 50, bm.Width, bm.Height);
+            
             if (_polyWallPoints.Count >= 2)
             {
                 e.Graphics.FillEllipse(Brushes.Orange, _polyWallPoints[0].X - 3, _polyWallPoints[0].Y - 3, 6, 6);
@@ -201,6 +206,10 @@ namespace DungeonBuilder2
                     break;
                 case Mode.BuildingBed:
                 case Mode.BuildingLamp:
+                case Mode.BuildingSofa:
+                case Mode.BuildingChair:
+                case Mode.BuildingArmChair:
+                    
                     _tempFurniture.Location = e.Location;
                     break;
             }
@@ -265,7 +274,7 @@ namespace DungeonBuilder2
                             _lastMousePos = e.Location;
                             return;
                         }
-                        _doors.Add(new Door(_grid.PtToGridPoint(_lastMousePos), _grid.PtToGridPoint(e.Location), 1));
+                        _doors.Add(new Door(_grid.PtToGridPoint(_lastMousePos), _grid.PtToGridPoint(e.Location)));
                     }
                     _tempLine = null;
                     _lastMousePos = Point.Empty;
@@ -292,7 +301,7 @@ namespace DungeonBuilder2
                             _lastMousePos = e.Location;
                             return;
                         }
-                        _lines.Add(new [] {_grid.PtToGridPoint(_lastMousePos), _grid.PtToGridPoint(e.Location)});
+                        _lines.Add(new Line (_grid.PtToGridPoint(_lastMousePos), _grid.PtToGridPoint(e.Location)));
                     }
                     _tempLine = null;
                     _lastMousePos = Point.Empty;
@@ -330,25 +339,62 @@ namespace DungeonBuilder2
                                 _doors.Remove(door);
                                 break;
                             }
-                        foreach (var line in _lines)
-                            if (e.Location.IsNearLineApices(line, 5)){
+                        foreach (Line line in _lines)
+                            if (e.Location.IsNearLineApices(new[]{line.PointFrom, line.PointTo}, 5)){
                                 _lines.Remove(line);      
                                 break;
                             }
-                        foreach (var ruler in _rulers)
+                        foreach (Ruler ruler in _rulers)
                             if (e.Location.IsNearLineApices(new [] {ruler.Start, ruler.End}, 5)){
                                 _rulers.Remove(ruler);      
+                                break;
+                            }
+                        foreach (Furniture furniture in _furniture)
+                            if (e.Location.IsInPolygon(new []{furniture.Location, furniture.Location + new Size(furniture.FImage.Size.Width, 0), furniture.Location + furniture.FImage.Size, furniture.Location + new Size(0, furniture.FImage.Size.Height) })){
+                                _furniture.Remove(furniture);
                                 break;
                             }
                     }
                     break;
                 case Mode.BuildingBed:
                     if (e.Button == MouseButtons.Left)
-                        _furniture.Add(new Furniture(new Bitmap(currentDirectory + "\\Bed.png"), e.Location));
+                    {
+                        _furniture.Add(_tempFurniture);
+                        _tempFurniture = new Furniture("Bed", (Image) Resources.ResourceManager.GetObject("Bed"),
+                            e.Location, 0);
+                    }
                     break;
                 case Mode.BuildingLamp:
                     if (e.Button == MouseButtons.Left)
-                        _furniture.Add(new Furniture(new Bitmap(currentDirectory + "\\Lamp.png"), e.Location));
+                    {
+                        _furniture.Add(_tempFurniture);
+                        _tempFurniture = new Furniture("Lamp", (Image) Resources.ResourceManager.GetObject("Lamp"),
+                            e.Location, 0);
+                    }
+                    break;
+                case Mode.BuildingSofa:
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        _furniture.Add(_tempFurniture);
+                        _tempFurniture = new Furniture("Sofa", (Image) Resources.ResourceManager.GetObject("Sofa"),
+                            e.Location, 0);
+                    }
+                    break;
+                case Mode.BuildingChair:
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        _furniture.Add(_tempFurniture);
+                        _tempFurniture = new Furniture("Chair", (Image) Resources.ResourceManager.GetObject("Chair"),
+                            e.Location, 0);
+                    }
+                    break;
+                case Mode.BuildingArmChair:
+                    if (e.Button == MouseButtons.Left)
+                    {
+                        _furniture.Add(_tempFurniture);
+                        _tempFurniture = new Furniture("ArmChair", (Image) Resources.ResourceManager.GetObject("ArmChair"),
+                            e.Location, 0);
+                    }
                     break;
             }
             pictureBox1.Invalidate();
@@ -424,7 +470,7 @@ namespace DungeonBuilder2
             {
                 gg.DrawLine(new Pen(Color.Gainsboro, 2), door.Corners[0], door.Corners[1]);
                 gg.DrawLine(new Pen(Color.Gray, 2), door.Corners[0], door.Corners[2]);
-                gg.DrawArc(Pens.Gray, door.Corners[0].X - door.Width, door.Corners[0].Y - door.Width, door.Width*2, door.Width*2, (int) -(180 / Math.PI * door.Corners[0].GetAngle(door.Corners[1])), door.OpenSide * 45);
+                gg.DrawArc(Pens.Gray, door.Corners[0].X - door.Width, door.Corners[0].Y - door.Width, door.Width*2, door.Width*2, (int) -(180 / Math.PI * door.Corners[0].GetAngle(door.Corners[1])), 45);
             }
             
             foreach (Window window in _windows)
@@ -433,9 +479,9 @@ namespace DungeonBuilder2
                 gg.DrawLine(Pens.Gainsboro, window.Corners[0].AvgPoint(window.Corners[3]), window.Corners[1].AvgPoint(window.Corners[2]));
             }
             
-            foreach (Point[] line in _lines)
+            foreach (Line line in _lines)
             {
-                gg.DrawLines(Pens.Gainsboro, line);
+                gg.DrawLine(Pens.Gainsboro, line.PointFrom, line.PointTo);
             }
             
             foreach (Ruler ruler in _rulers)
@@ -451,7 +497,7 @@ namespace DungeonBuilder2
                 gg.Restore(graphicsState);
             }
             
-            foreach (var furniture in _furniture)
+            foreach (Furniture furniture in _furniture)
                 gg.DrawImage(furniture.FImage, furniture.Location.X, furniture.Location.Y, furniture.FImage.Width, furniture.FImage.Height);
 
             pictureBox1.Image.Save(@"D:\F.png",ImageFormat.Png);
@@ -562,14 +608,134 @@ namespace DungeonBuilder2
         {
             UpdateButtonStates(sender as Button);
             _mode = Mode.BuildingBed;
-            _tempFurniture = new Furniture(new Bitmap(currentDirectory + "\\Bed.png"), new Point(0, 0));
+            _tempFurniture = new Furniture("Bed", (Image)Resources.ResourceManager.GetObject("Bed"), new Point(0, 0), 0);
         }
 
         private void btLamp_Click(object sender, EventArgs e)
         {
             UpdateButtonStates(sender as Button);
             _mode = Mode.BuildingLamp;
-            _tempFurniture = new Furniture(new Bitmap(currentDirectory + "\\Lamp.png"), new Point(0, 0));
+            _tempFurniture = new Furniture("Lamp", (Image)Resources.ResourceManager.GetObject("Lamp"), new Point(0, 0), 0);
         }
+
+        private void btSave_Click(object sender, EventArgs e)
+        {
+            XmlSerializer formatter = new XmlSerializer(typeof(List<List<BuildingComponent>>));
+            saveFileDialog1.Filter = "Xml files(*.xml)|*.xml";
+            string fileName = String.Empty;
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                fileName = saveFileDialog1.FileName;
+            using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate))
+            {
+                List<List<BuildingComponent>> lists = new List<List<BuildingComponent>>();
+                lists.Add(_walls);
+                lists.Add(_doors);
+                lists.Add(_windows);
+                lists.Add(_rulers);
+                lists.Add(_lines); 
+                lists.Add(_furniture);
+                formatter.Serialize(fs, lists);
+            }
+        }
+
+        private void btOpen_Click(object sender, EventArgs e)
+        {
+            List<List<BuildingComponent>> lists;
+            XmlSerializer formatter = new XmlSerializer(typeof(List<List<BuildingComponent>>));
+            openFileDialog1.Filter = "Xml files(*.xml)|*.xml";
+            string fileName = String.Empty;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                fileName = openFileDialog1.FileName;
+            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+            {
+                lists = (List<List<BuildingComponent>>)formatter.Deserialize(fs);
+            }
+
+            _walls = lists[0];
+            _doors = lists[1];
+            _windows = lists[2];
+            _rulers = lists[3];
+            _lines = lists[4];
+            _furniture = lists[5];
+            foreach (Furniture furniture in _furniture)
+            {
+                switch (furniture.FType)
+                {
+                    case "Bed":
+                        furniture.FImage = (Image) Resources.ResourceManager.GetObject("Bed");
+                        break;
+                    case "Lamp":
+                        furniture.FImage = (Image) Resources.ResourceManager.GetObject("Lamp");
+                        break;
+                    case "Sofa":
+                        furniture.FImage = (Image) Resources.ResourceManager.GetObject("Sofa");
+                        break;
+                    case "Chair":
+                        furniture.FImage = (Image) Resources.ResourceManager.GetObject("Chair");
+                        break;
+                    case "ArmChair":
+                        furniture.FImage = (Image) Resources.ResourceManager.GetObject("ArmChair");
+                        break;
+                    default:
+                        furniture.FImage = (Image) Resources.ResourceManager.GetObject("Lamp");
+                        break;
+                    
+                }
+                RotateImage();
+
+                void RotateImage()
+                {
+                    RotateFlipType flipType;
+                    switch (furniture.Rotation)
+                    {
+                        case 90:
+                            flipType = RotateFlipType.Rotate90FlipNone;
+                            break;
+                        case 180:
+                            flipType = RotateFlipType.Rotate180FlipNone;
+                            break;
+                        case 270:
+                            flipType = RotateFlipType.Rotate270FlipNone;
+                            break;
+                        default:
+                            flipType = RotateFlipType.RotateNoneFlipNone;
+                            break;
+                    }
+                    furniture.FImage.RotateFlip(flipType);
+                }
+            }
+            pictureBox1.Invalidate();
+        }
+
+        private void btSofa_Click(object sender, EventArgs e)
+        {
+            UpdateButtonStates(sender as Button);
+            _mode = Mode.BuildingSofa;
+            _tempFurniture = new Furniture("Sofa", (Image)Resources.ResourceManager.GetObject("Sofa"), new Point(0, 0), 0);
+        }
+
+        private void btChair_Click(object sender, EventArgs e)
+        {
+            UpdateButtonStates(sender as Button);
+            _mode = Mode.BuildingChair;
+            _tempFurniture = new Furniture("Chair", (Image)Resources.ResourceManager.GetObject("Chair"), new Point(0, 0), 0);
+        }
+
+        private void btArmChair_Click(object sender, EventArgs e)
+        {
+            UpdateButtonStates(sender as Button);
+            _mode = Mode.BuildingArmChair;
+            _tempFurniture = new Furniture("ArmChair", (Image)Resources.ResourceManager.GetObject("ArmChair"), new Point(0, 0), 0);
+        }
+
+        private void OnMouseWheelEvent(object sender, MouseEventArgs e)
+        {
+            _tempFurniture.Rotation += 90;
+            _tempFurniture.Rotation %= 360;
+            _tempFurniture?.FImage.RotateFlip(RotateFlipType.Rotate90FlipNone);
+
+        }
+
+
     }
 }

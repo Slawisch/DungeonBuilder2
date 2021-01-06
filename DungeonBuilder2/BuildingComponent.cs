@@ -1,9 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace DungeonBuilder2
 {
+    [XmlInclude(typeof(Wall))]
+    [XmlInclude(typeof(Door))]
+    [XmlInclude(typeof(Window))]
+    [XmlInclude(typeof(PolyWall))]
+    [XmlInclude(typeof(Line))]
+    [XmlInclude(typeof(Ruler))]
+    [XmlInclude(typeof(Furniture))]
+    [Serializable]
     public abstract class BuildingComponent
     {
         public Point[] Corners;

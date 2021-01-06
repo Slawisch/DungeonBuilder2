@@ -55,9 +55,15 @@
             this.tbScale = new System.Windows.Forms.TextBox();
             this.labelWallWidth = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btSave = new System.Windows.Forms.Button();
+            this.btOpen = new System.Windows.Forms.Button();
             this.tbScaleMultiplier = new System.Windows.Forms.TextBox();
             this.btPolyWall = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.btArmChair = new System.Windows.Forms.Button();
+            this.btChair = new System.Windows.Forms.Button();
+            this.btSofa = new System.Windows.Forms.Button();
+            this.btLamp = new System.Windows.Forms.Button();
             this.brBed = new System.Windows.Forms.Button();
             this.btLine = new System.Windows.Forms.Button();
             this.btMeasuringTape = new System.Windows.Forms.Button();
@@ -65,7 +71,8 @@
             this.btDoor = new System.Windows.Forms.Button();
             this.btRuler = new System.Windows.Forms.Button();
             this.panelPictureBox = new System.Windows.Forms.Panel();
-            this.btLamp = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize) (this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize) (this.wallWidthTrack)).BeginInit();
             this.panel1.SuspendLayout();
@@ -88,6 +95,7 @@
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            this.pictureBox1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.OnMouseWheelEvent);
             // 
             // btWall
             // 
@@ -366,6 +374,8 @@
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.btSave);
+            this.panel2.Controls.Add(this.btOpen);
             this.panel2.Controls.Add(this.tbScaleMultiplier);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.labelScaleUp);
@@ -384,6 +394,42 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(1058, 38);
             this.panel2.TabIndex = 25;
+            // 
+            // btSave
+            // 
+            this.btSave.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btSave.BackColor = System.Drawing.Color.Transparent;
+            this.btSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btSave.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.btSave.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.btSave.Location = new System.Drawing.Point(915, 4);
+            this.btSave.Margin = new System.Windows.Forms.Padding(0);
+            this.btSave.Name = "btSave";
+            this.btSave.Size = new System.Drawing.Size(62, 26);
+            this.btSave.TabIndex = 30;
+            this.btSave.Text = "Save";
+            this.btSave.UseVisualStyleBackColor = false;
+            this.btSave.Click += new System.EventHandler(this.btSave_Click);
+            // 
+            // btOpen
+            // 
+            this.btOpen.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.btOpen.BackColor = System.Drawing.Color.Transparent;
+            this.btOpen.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btOpen.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.btOpen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.btOpen.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.btOpen.Location = new System.Drawing.Point(983, 4);
+            this.btOpen.Margin = new System.Windows.Forms.Padding(0);
+            this.btOpen.Name = "btOpen";
+            this.btOpen.Size = new System.Drawing.Size(62, 26);
+            this.btOpen.TabIndex = 29;
+            this.btOpen.Text = "Open";
+            this.btOpen.UseVisualStyleBackColor = false;
+            this.btOpen.Click += new System.EventHandler(this.btOpen_Click);
             // 
             // tbScaleMultiplier
             // 
@@ -420,6 +466,9 @@
             // 
             this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.btArmChair);
+            this.panel3.Controls.Add(this.btChair);
+            this.panel3.Controls.Add(this.btSofa);
             this.panel3.Controls.Add(this.btLamp);
             this.panel3.Controls.Add(this.brBed);
             this.panel3.Controls.Add(this.btLine);
@@ -435,6 +484,78 @@
             this.panel3.TabIndex = 27;
             this.panel3.Click += new System.EventHandler(this.panel3_Click);
             // 
+            // btArmChair
+            // 
+            this.btArmChair.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (60)))), ((int) (((byte) (60)))), ((int) (((byte) (60)))));
+            this.btArmChair.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btArmChair.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btArmChair.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btArmChair.Font = new System.Drawing.Font("Microsoft YaHei", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.btArmChair.ForeColor = System.Drawing.Color.Silver;
+            this.btArmChair.Image = ((System.Drawing.Image) (resources.GetObject("btArmChair.Image")));
+            this.btArmChair.Location = new System.Drawing.Point(77, 428);
+            this.btArmChair.Name = "btArmChair";
+            this.btArmChair.Size = new System.Drawing.Size(68, 79);
+            this.btArmChair.TabIndex = 36;
+            this.btArmChair.Text = "Armchair";
+            this.btArmChair.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btArmChair.UseVisualStyleBackColor = false;
+            this.btArmChair.Click += new System.EventHandler(this.btArmChair_Click);
+            // 
+            // btChair
+            // 
+            this.btChair.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (60)))), ((int) (((byte) (60)))), ((int) (((byte) (60)))));
+            this.btChair.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btChair.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btChair.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btChair.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.btChair.ForeColor = System.Drawing.Color.Silver;
+            this.btChair.Image = ((System.Drawing.Image) (resources.GetObject("btChair.Image")));
+            this.btChair.Location = new System.Drawing.Point(3, 428);
+            this.btChair.Name = "btChair";
+            this.btChair.Size = new System.Drawing.Size(68, 79);
+            this.btChair.TabIndex = 35;
+            this.btChair.Text = "Chair";
+            this.btChair.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btChair.UseVisualStyleBackColor = false;
+            this.btChair.Click += new System.EventHandler(this.btChair_Click);
+            // 
+            // btSofa
+            // 
+            this.btSofa.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (60)))), ((int) (((byte) (60)))), ((int) (((byte) (60)))));
+            this.btSofa.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btSofa.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btSofa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btSofa.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.btSofa.ForeColor = System.Drawing.Color.Silver;
+            this.btSofa.Image = ((System.Drawing.Image) (resources.GetObject("btSofa.Image")));
+            this.btSofa.Location = new System.Drawing.Point(77, 343);
+            this.btSofa.Name = "btSofa";
+            this.btSofa.Size = new System.Drawing.Size(68, 79);
+            this.btSofa.TabIndex = 34;
+            this.btSofa.Text = "Sofa";
+            this.btSofa.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btSofa.UseVisualStyleBackColor = false;
+            this.btSofa.Click += new System.EventHandler(this.btSofa_Click);
+            // 
+            // btLamp
+            // 
+            this.btLamp.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (60)))), ((int) (((byte) (60)))), ((int) (((byte) (60)))));
+            this.btLamp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.btLamp.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.btLamp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btLamp.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.btLamp.ForeColor = System.Drawing.Color.Silver;
+            this.btLamp.Image = ((System.Drawing.Image) (resources.GetObject("btLamp.Image")));
+            this.btLamp.Location = new System.Drawing.Point(3, 343);
+            this.btLamp.Name = "btLamp";
+            this.btLamp.Size = new System.Drawing.Size(68, 79);
+            this.btLamp.TabIndex = 33;
+            this.btLamp.Text = "Lamp";
+            this.btLamp.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btLamp.UseVisualStyleBackColor = false;
+            this.btLamp.Click += new System.EventHandler(this.btLamp_Click);
+            // 
             // brBed
             // 
             this.brBed.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (60)))), ((int) (((byte) (60)))), ((int) (((byte) (60)))));
@@ -442,7 +563,7 @@
             this.brBed.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.brBed.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.brBed.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.brBed.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.brBed.ForeColor = System.Drawing.Color.Silver;
             this.brBed.Image = ((System.Drawing.Image) (resources.GetObject("brBed.Image")));
             this.brBed.Location = new System.Drawing.Point(77, 258);
             this.brBed.Name = "brBed";
@@ -460,7 +581,7 @@
             this.btLine.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btLine.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btLine.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.btLine.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.btLine.ForeColor = System.Drawing.Color.Silver;
             this.btLine.Image = ((System.Drawing.Image) (resources.GetObject("btLine.Image")));
             this.btLine.Location = new System.Drawing.Point(3, 258);
             this.btLine.Name = "btLine";
@@ -478,7 +599,7 @@
             this.btMeasuringTape.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btMeasuringTape.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btMeasuringTape.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.btMeasuringTape.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.btMeasuringTape.ForeColor = System.Drawing.Color.Silver;
             this.btMeasuringTape.Image = ((System.Drawing.Image) (resources.GetObject("btMeasuringTape.Image")));
             this.btMeasuringTape.Location = new System.Drawing.Point(3, 173);
             this.btMeasuringTape.Name = "btMeasuringTape";
@@ -496,7 +617,7 @@
             this.btWindow.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btWindow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btWindow.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.btWindow.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.btWindow.ForeColor = System.Drawing.Color.Silver;
             this.btWindow.Image = ((System.Drawing.Image) (resources.GetObject("btWindow.Image")));
             this.btWindow.Location = new System.Drawing.Point(3, 88);
             this.btWindow.Name = "btWindow";
@@ -514,7 +635,7 @@
             this.btDoor.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btDoor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btDoor.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.btDoor.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.btDoor.ForeColor = System.Drawing.Color.Silver;
             this.btDoor.Image = ((System.Drawing.Image) (resources.GetObject("btDoor.Image")));
             this.btDoor.Location = new System.Drawing.Point(77, 88);
             this.btDoor.Name = "btDoor";
@@ -532,7 +653,7 @@
             this.btRuler.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.btRuler.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btRuler.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.btRuler.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.btRuler.ForeColor = System.Drawing.Color.Silver;
             this.btRuler.Image = ((System.Drawing.Image) (resources.GetObject("btRuler.Image")));
             this.btRuler.Location = new System.Drawing.Point(77, 173);
             this.btRuler.Name = "btRuler";
@@ -554,23 +675,9 @@
             this.panelPictureBox.Size = new System.Drawing.Size(903, 543);
             this.panelPictureBox.TabIndex = 28;
             // 
-            // btLamp
+            // openFileDialog1
             // 
-            this.btLamp.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (60)))), ((int) (((byte) (60)))), ((int) (((byte) (60)))));
-            this.btLamp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.btLamp.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.btLamp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btLamp.Font = new System.Drawing.Font("Microsoft YaHei", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.btLamp.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.btLamp.Image = ((System.Drawing.Image) (resources.GetObject("btLamp.Image")));
-            this.btLamp.Location = new System.Drawing.Point(3, 343);
-            this.btLamp.Name = "btLamp";
-            this.btLamp.Size = new System.Drawing.Size(68, 79);
-            this.btLamp.TabIndex = 33;
-            this.btLamp.Text = "Lamp";
-            this.btLamp.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btLamp.UseVisualStyleBackColor = false;
-            this.btLamp.Click += new System.EventHandler(this.btLamp_Click);
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // Form1
             // 
@@ -600,66 +707,50 @@
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.Button btLamp;
+        private System.Windows.Forms.Button btArmChair;
+        private System.Windows.Forms.Button btChair;
+
+        private System.Windows.Forms.Button btSofa;
 
         private System.Windows.Forms.Button brBed;
-
-        private System.Windows.Forms.Button btLine;
-
-        private System.Windows.Forms.Button btMeasuringTape;
-
-        private System.Windows.Forms.Button btWindow;
-
+        private System.Windows.Forms.Button btClose;
         private System.Windows.Forms.Button btDoor;
-
+        private System.Windows.Forms.Button btLamp;
+        private System.Windows.Forms.Button btLine;
+        private System.Windows.Forms.Button btMaximize;
+        private System.Windows.Forms.Button btMeasuringTape;
+        private System.Windows.Forms.Button btMinimize;
+        private System.Windows.Forms.Button btOpen;
+        private System.Windows.Forms.Button btPolyWall;
         private System.Windows.Forms.Button btRuler;
-
+        private System.Windows.Forms.Button btSave;
+        private System.Windows.Forms.Button btWall;
+        private System.Windows.Forms.Button btWindow;
         private System.Windows.Forms.CheckBox cbGrid;
         private System.Windows.Forms.CheckBox cbPoints;
         private System.Windows.Forms.CheckBox cbRuler;
-
-        private System.Windows.Forms.Button btMaximize;
-
-        private System.Windows.Forms.Panel panelPictureBox;
-
-        private System.Windows.Forms.Button btPolyWall;
-        private System.Windows.Forms.Button btWall;
-
-        private System.Windows.Forms.Panel panel3;
-
-        private System.Windows.Forms.TextBox tbScaleMultiplier;
-
-        private System.Windows.Forms.Panel panel2;
-
-        private System.Windows.Forms.Panel panel1;
-
-        private System.Windows.Forms.TextBox tbScale;
-
         private JDragControl.JDragControl jDragControl1;
-
-        private System.Windows.Forms.Button btClose;
-        private System.Windows.Forms.Button btMinimize;
-
-        private System.Windows.Forms.Label labelWallWidth;
-
-        private System.Windows.Forms.Label label8;
-
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TrackBar wallWidthTrack;
-
-        private System.Windows.Forms.Label label2;
-
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label labelMultiplierDown;
         private System.Windows.Forms.Label labelMultiplierUp;
-
         private System.Windows.Forms.Label labelScaleDown;
         private System.Windows.Forms.Label labelScaleUp;
-
-        private System.Windows.Forms.Label label4;
-
+        private System.Windows.Forms.Label labelWallWidth;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panelPictureBox;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.TextBox tbScale;
+        private System.Windows.Forms.TextBox tbScaleMultiplier;
+        private System.Windows.Forms.TrackBar wallWidthTrack;
 
         #endregion
     }

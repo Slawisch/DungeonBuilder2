@@ -4,6 +4,10 @@ namespace DungeonBuilder2
 {
     public class PolyWall : BuildingComponent
     {
+        public PolyWall()
+        {
+            
+        }
         public PolyWall(Point[] corners)
         {
             Corners = corners;

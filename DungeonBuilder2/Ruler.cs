@@ -3,7 +3,8 @@ using System.Drawing;
 
 namespace DungeonBuilder2
 {
-    public class Ruler
+    [Serializable]
+    public class Ruler : BuildingComponent
     {
         private Point _end;
         public Point Start { get; set; }
@@ -15,6 +16,7 @@ namespace DungeonBuilder2
         }
 
         public int Length { get; set; }
+        public Ruler (){}
 
         public Ruler (Point p1, Point p2)
         {
@@ -25,6 +27,14 @@ namespace DungeonBuilder2
         private void UpdateLength()
         {
             Length = (int)Start.GetDistance(End)*10;
+        }
+        
+        public override void Move(int cx, int cy)
+        {
+        }
+
+        protected override void UpdatePosition()
+        {
         }
         
     }

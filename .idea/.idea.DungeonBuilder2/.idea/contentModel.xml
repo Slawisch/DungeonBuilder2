@@ -19,9 +19,11 @@
         <e p="GraphicalObject.cs" t="Include" />
         <e p="Grid.cs" t="Include" />
         <e p="ImageExtension.cs" t="Include" />
+        <e p="Line.cs" t="Include" />
         <e p="Mode.cs" t="Include" />
         <e p="MovementFreedom.cs" t="Include" />
         <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
         <e p="PointExtension.cs" t="Include" />
         <e p="PolyWall.cs" t="Include" />
         <e p="Program.cs" t="Include" />
@@ -32,7 +34,13 @@
           <e p="Settings.Designer.cs" t="Include" />
           <e p="Settings.settings" t="Include" />
         </e>
-        <e p="Resources" t="Include" />
+        <e p="Resources" t="Include">
+          <e p="ArmChair.png" t="Include" />
+          <e p="Bed.png" t="Include" />
+          <e p="Chair.png" t="Include" />
+          <e p="Lamp.png" t="Include" />
+          <e p="Sofa.png" t="Include" />
+        </e>
         <e p="Ruler.cs" t="Include" />
         <e p="TestRectangle.cs" t="Include" />
         <e p="Wall.cs" t="Include" />

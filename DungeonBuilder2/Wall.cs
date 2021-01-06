@@ -3,6 +3,7 @@ using System.Drawing;
 
 namespace DungeonBuilder2
 {
+    [Serializable]
     public class Wall : BuildingComponent
     {
         public int Width { get; set; }
@@ -25,6 +26,11 @@ namespace DungeonBuilder2
                 _end2 = value;
                 UpdatePosition();
             }
+        }
+
+        public Wall()
+        {
+            
         }
 
         public Wall(Point point1, Point point2, int width)

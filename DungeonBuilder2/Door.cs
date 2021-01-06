@@ -7,13 +7,12 @@ namespace DungeonBuilder2
     {
         public bool Opened { get; set; } = true;
         public int Width { get; set; }
-        public int OpenSide { private set; get; }
-        public Door(Point fromPt, Point toPt, int openSide)
+        public Door() : base(){}
+        public Door(Point fromPt, Point toPt)
         {
             Corners = new Point[3];
             Corners[0] = fromPt;
             Corners[1] = toPt;
-            OpenSide = openSide;
             Width = (int)Corners[0].GetDistance(Corners[1]);
             UpdatePosition();
         }
@@ -21,8 +20,7 @@ namespace DungeonBuilder2
         protected sealed override void UpdatePosition()
         {
             var angle = Corners[0].GetAngle(Corners[1]) + Math.PI / 4;
-            if (OpenSide == 1)
-                angle += Math.PI * 1.5;
+            angle += Math.PI * 1.5;
             Point delta;
             delta = new Point((int) Math.Round(Math.Cos(angle) * Width),
                     (int) Math.Round(-Math.Sin(angle) * Width));

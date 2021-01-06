@@ -13,8 +13,6 @@
         BuildingBed,
         BuildingSofa,
         BuildingLamp,
-        BuildingToilet,
-        BuildingBath,
         BuildingArmChair,
         BuildingChair
     }
